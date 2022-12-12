@@ -1,0 +1,54 @@
+@startuml
+class Library {
+- borrowedItems: Set<BorrowedItem>
+- borrowableItems: Set<BorrowableItem>
+- users: Set<User>
++ getItemWithLongestOverdue(): BorrowedItem
+}
+abstract class BorrowableItem {
+- name: String
+- id: UUID
+}
+class Cd extends BorrowableItem {
+- numberOfTracks: int
+}
+class Book extends BorrowableItem {
+- numberOfPages: int
+- bookType: BookType
+}
+enum BookType {
+NOVEL,
+TEXTBOOK,
+ENCYCLOPEDIA;
+}
+class User {
+- {static} MAX_NUMBER_OF_LATE_RETURNS: int
+- name: String
+- id: UUID
+- userType: UserType
+- numberOfLateReturns: int
++ isAllowedToBorrow(): boolean
+
+}
+enum UserType {
+LOCAL_RESIDENT(3, 7),
+STUDENT(5, 14);
+- maxBorrowableItem: int
+- duration: int
+}
+class BorrowedItem {
+- item: BorrowableItem
+- user: User
+- dateOfBorrow: LocalDate
+- dateOfReturn: LocalDate
++ returnItem(): void
++ getOverDueTime(): int
++ isItemOverdue(): boolean
+}
+Library *-- User
+User -- UserType
+Book -- BookType
+Library *-- BorrowedItem
+Library *-- BorrowableItem
+BorrowedItem o-- User
+@enduml
